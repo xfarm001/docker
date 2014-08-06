@@ -1,23 +1,20 @@
-# DOCKER-VERSION latest
-FROM    centos:centos6
+FROM centos:centos6
 
-# ここは自由に変えてください
-MAINTAINER sugiyan
+RUN yum -y install wget
+RUN yum -y install tar
+RUN yum -y install perl
+RUN yum -y install libaio
+RUN yum -y install libaio-devel
 
-# パッケージインストール
-RUN yum install -y mysql mysql-server
+RUN wget http://dev.mysql.com/get/Downloads/MySQL-5.6/MySQL-5.6.19-1.linux_glibc2.5.x86_64.rpm-bundle.tar
+RUN tar xvf MySQL-5.6.19-1.linux_glibc2.5.x86_64.rpm-bundle.tar
+RUN rpm -ivh MySQL-shared-compat-5.6.19-1.linux_glibc2.5.x86_64.rpm
+RUN rpm -ivh MySQL-shared-5.6.19-1.linux_glibc2.5.x86_64.rpm
+RUN rpm -ivh MySQL-devel-5.6.19-1.linux_glibc2.5.x86_64.rpm
+RUN rpm -ivh MySQL-client-5.6.19-1.linux_glibc2.5.x86_64.rpm
+RUN rpm -ivh MySQL-server-5.6.19-1.linux_glibc2.5.x86_64.rpm
+RUN rpm -ivh MySQL-embedded-5.6.19-1.linux_glibc2.5.x86_64.rpm
 
-# mysqlサーバのセットアップ
-RUN echo "NETWORKING=yes" > /etc/sysconfig/network
-ADD ./setup.sql
-RUN /usr/bin/mysqld_safe & \
-        sleep 10s && \
-        cat setup.sql | mysql
-
-# 外部からmysqlサーバにアクセスできるように
-RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
-
-# ポート番号 3306 を外部に公開
 EXPOSE 3306
 
-CMD ["/usr/bin/mysqld_safe"]
+CMD ["echo", "running!"]
