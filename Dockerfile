@@ -1,5 +1,5 @@
 # DOCKER-VERSION latest
-FROM    centos:6
+FROM    centos:centos6
 
 # ここは自由に変えてください
 MAINTAINER sugiyan
